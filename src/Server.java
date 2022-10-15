@@ -51,7 +51,27 @@ public class Server {
 
         @Override
         public void run() {
+            ConsoleHelper.writeMessage("Устанавленно новое соединение с сервером" + socket.getRemoteSocketAddress());
 
+            String name = null;
+
+            try (Connection connection = new Connection(socket)){
+                name = serverHandshake(connection);
+                sendBroadcastMessage(new Message(MessageType.USER_ADDED, name)); // new member
+
+                notifyUsers(connection, name);
+
+                serverMainLoop(connection, name);
+            }catch (Exception e) {
+                ConsoleHelper.writeMessage("Произошла ошибка при обмене данными с свервером");
+            }
+
+            if (name!=null){
+                connectionMap.remove(name);
+                sendBroadcastMessage(new Message(MessageType.USER_REMOVED, name));
+            }
+
+            ConsoleHelper.writeMessage("Соединение зыкрыто");
         }
 
         private String serverHandshake(Connection connection) throws IOException, ClassNotFoundException {
@@ -84,13 +104,27 @@ public class Server {
             }
         }
 
-        private void notifyUsers(Connection connection, String userName) throws IOException{
+        private void notifyUsers(Connection connection, String userName) throws IOException {
             for (String name :
                     connectionMap.keySet()) {
-                if (name.equals(userName)){
+                if (name.equals(userName)) {
                     continue;
                 }
                 connection.send(new Message(MessageType.USER_ADDED, name));
+            }
+        }
+
+        private void serverMainLoop(Connection connection, String UserName) throws IOException, ClassNotFoundException{
+            while (true) {
+                Message message = connection.receive();
+
+                if (message.getType() == MessageType.TEXT) {
+                    message = new Message(MessageType.TEXT, UserName + ": " + message.getData());
+                    sendBroadcastMessage(message);
+                } else {
+                    ConsoleHelper.writeMessage("Ошибка (не текст)");
+                    continue;
+                }
             }
         }
     }
