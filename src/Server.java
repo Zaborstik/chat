@@ -36,7 +36,6 @@ public class Server {
             }
         } catch (Exception e) {
             System.out.println("Произошла ошибка");
-            ;
         }
     }
 
@@ -61,7 +60,7 @@ public class Server {
 
                 serverMainLoop(connection, name);
             }catch (Exception e) {
-                ConsoleHelper.writeMessage("Произошла ошибка при обмене данными с свервером");
+                ConsoleHelper.writeMessage("Кто-то покинул чат" + socket.getRemoteSocketAddress());
             }
 
             if (name!=null){
