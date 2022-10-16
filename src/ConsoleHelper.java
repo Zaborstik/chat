@@ -1,4 +1,4 @@
-package com.javarush.task.task30.task3008;
+package src;
 
 
 import java.io.BufferedReader;

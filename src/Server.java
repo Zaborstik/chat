@@ -1,12 +1,10 @@
-package com.javarush.task.task30.task3008;
+package src;
 
-import javax.sound.sampled.Port;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.NavigableMap;
-import java.util.concurrent.*;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Server {
 
@@ -25,7 +23,7 @@ public class Server {
 
 
     public static void main(String[] args) {
-        System.out.println("ВВедите порт сервера");
+        System.out.println("Введите порт сервера");
 
         int port = ConsoleHelper.readInt();
 

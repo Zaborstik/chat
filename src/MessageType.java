@@ -1,4 +1,4 @@
-package com.javarush.task.task30.task3008;
+package src;
 
 public enum MessageType {
     NAME_REQUEST,
